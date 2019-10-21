@@ -17,16 +17,16 @@ class CorvaTestApp < Sinatra::Base
     validation = Validation.new(request_body)
     validation.validate_req_data
     if validation.valid?
-      # values_1 = request_body['data'].first['values']
-      # values_2 = request_body['data'].last['values']
-      # result_json = {
-      #   request_id: request_id,
-      #   timestamp: request_body['timestamp'],
-      #   result: {
-      #     title: 'Result',
-      #     values: values_1.zip(values_2).map { |x, y| x - y }
-      #   }
-      # }.to_json
+      values_1 = validation.valid_values.first
+      values_2 = validation.valid_values.last
+      result_json = {
+        request_id: request_id,
+        timestamp: JSON.parse(request_body)['timestamp'],
+        result: {
+          title: 'Result',
+          values: values_1.zip(values_2).map { |x, y| x - y }
+        }
+      }.to_json
     else
       content_type :json
       status 400
